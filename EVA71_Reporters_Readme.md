@@ -1,4 +1,4 @@
-#Novel Reporter Constructs to Accelerate Antiviral and Therapeutic Discovery for Enterovirus-A71
+# Novel Reporter Constructs to Accelerate Antiviral and Therapeutic Discovery for Enterovirus-A71
 
 Abstract
 
