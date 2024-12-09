@@ -1,0 +1,11 @@
+﻿hgvs,dataset,viralprotein,VirusTiter,ProteinSize,Passage_number,Rep
+Replication_insertion1_3334,mBaoJin,2A,8.06E+03,233,Passage 0,B
+Replication_insertion1_3334,mBaoJin,2A,3.12E+07,233,Passage 3,B
+Replication_insertion2_3337,mNeonGreen,2A,4.03E+03,235,Passage 0,A
+Replication_insertion2_3337,mNeonGreen,2A,1.65E+07,235,Passage 3,A
+Replication_insertion1_3334,mRuby3,2A,1.61E+04,236,Passage 0,A
+Replication_insertion1_3334,mRuby3,2A,5.12E+06,236,Passage 3,A
+Replication_insertion1_3334,NanoLuc,2A,8.19E+05,170,Passage 0,A
+Replication_insertion1_3334,NanoLuc,2A,9.27E+06,170,Passage 3,A
+Replication_insertion1_3334,mFAP10,2A,1.30E+06,115,Passage 0,A
+Replication_insertion1_3334,mFAP10,2A,3.71E+07,115,Passage 3,A

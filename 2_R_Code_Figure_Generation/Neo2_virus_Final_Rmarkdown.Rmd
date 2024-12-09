@@ -1,0 +1,238 @@
+---
+title: "Neo2_virus_Final_Rmarkdown"
+author: "William_Bakhache"
+date: "2024-11-12"
+output: html_document
+---
+
+```{r}
+library(ggplot2)
+library(tidyverse)
+library(lubridate)
+```
+
+```{r}
+Replicon_Analysis_Function_SPINE <- function(input_dataframe,sample_mapping,pdfname,color_condition,color_control,minimum,maximum) {
+
+#Reading in .csv file from Neo2 replicon dataset
+Replicon_dataframe <- read_csv(input_dataframe)
+#Subsetting the dataframe to measure only 16 hrs.
+Replicon_dataframe <- Replicon_dataframe[1:97, ]
+#Changing Time to character
+Replicon_dataframe$Time <- as.character(Replicon_dataframe$Time)
+#Changing time format into minutes
+Replicon_dataframe$Time <- as.numeric(as.difftime(Replicon_dataframe$Time, format = "%H:%M:%S", units = "mins"))
+#Changing column names to the corresponding sample names
+names(Replicon_dataframe)[names(Replicon_dataframe) %in% names(sample_mapping)] <- sample_mapping[names(Replicon_dataframe)[names(Replicon_dataframe) %in% names(sample_mapping)]]
+#Pivot longer the dataset
+Replicon_dataframe <- pivot_longer(Replicon_dataframe, cols = -Time, names_to = "SampleName",values_to = "RLU")
+#Subset dataframe so that it only has samples that start with Conc
+Replicon_dataframe <- subset(Replicon_dataframe, grepl("^Conc", SampleName))
+#Extract the concentration from the string
+Replicon_dataframe <- Replicon_dataframe %>%
+ mutate(concentration = as.numeric(gsub("Conc_(\\d+).*", "\\1", SampleName)))
+#Group by time and concentration and calculate the mean and sd at each timepoint
+Replicon_dataframe <- Replicon_dataframe %>% group_by(Time, concentration) %>%
+  mutate(mean_RLU = mean(RLU),
+         sd_RLU = sd(RLU))%>% distinct(Time, concentration, .keep_all = TRUE)
+#Select columns of interest
+Replicon_dataframe <- Replicon_dataframe[, c("Time", "concentration","mean_RLU","sd_RLU")]
+# Create a new dataframe called control_data for plotting
+control_data <- filter(Replicon_dataframe, concentration == 0)
+# Get unique concentrations
+unique_concentrations <- unique(Replicon_dataframe$concentration)
+# Create a new dataframe for control data that includes all concentrations:This just represents the control condition
+expanded_control_data <- control_data %>%
+  mutate(concentration = list(unique_concentrations)) %>%
+  unnest(concentration)
+#Remove concentration 0 from expanded and replication dataframe because we already have that as red line
+expanded_control_data <- filter(expanded_control_data, concentration>0)
+Replicon_dataframe_plotting <- filter(Replicon_dataframe, concentration>0)
+#Filtering for rupintrivir and non-infected for the Spinal cord dataframes
+Replicon_dataframe_plotting_conc1 <- filter(Replicon_dataframe, concentration==1)
+Replicon_dataframe_plotting_conc2 <- filter(Replicon_dataframe, concentration==2)
+
+# Create the main plot with the replicon data
+Plot <- ggplot(Replicon_dataframe_plotting, aes(x = Time, y = log10(mean_RLU))) +
+  geom_point(color = color_condition,size=0.5) +
+  labs(x = "Time (min)", y = "RLU (log10)") +theme_bw() +
+  facet_wrap(~concentration,ncol = 5) + ylim(minimum, maximum)
+
+# Add the expanded control data to all facets
+Plot <- Plot +
+  geom_point(data = expanded_control_data, aes(x = Time, y = log10(mean_RLU)), color = color_control,size=0.5) 
+
+
+# Create the main plot with the replicon data in a linear range for the spinal cord data
+Plot2 <- ggplot(Replicon_dataframe_plotting_conc1, aes(x = Time, y = mean_RLU)) +
+  geom_point(color = color_condition,size=0.5)  +
+  labs(x = "Time (min)", y = "RLU") +theme_bw() 
+
+Plot2 <- Plot2 + geom_point(data = Replicon_dataframe_plotting_conc2, aes(x = Time, y = mean_RLU), color = "snow4",size=0.5)
+
+Plot2 <- Plot2 +
+ geom_point(data = expanded_control_data, aes(x = Time, y = mean_RLU), color = color_control,size=0.5) 
+  
+
+#Plot name
+filename <- paste0("RepliconTimecourse_",pdfname, ".pdf")
+filename2 <- paste0("RepliconTimecourselinear_",pdfname, ".pdf")
+
+#Save plot
+ggsave(plot=Plot,filename, height = 3, width = 10)
+ggsave(plot=Plot2,filename2, height = 2, width = 4)
+
+
+return(list(replication_concentrationdataframe=Replicon_dataframe_plotting,controldataframe=expanded_control_data,plot=Plot,plot2=Plot2))
+ 
+}
+```
+
+```{r}
+# Mapping for Nanoluc samples
+
+sample_mapping_1_nanoluc_replicon<- c(
+  "B2" = "Conc_1_repA", "B3" = "Conc_1_repB", "B4" = "Conc_1_repC",
+  "B5" = "Conc_0_repA", "B6" = "Conc_0_repB", "B7" = "Conc_0_repC",
+  "B8" = "Conc_2_repA", "B9" = "Conc_2_repB", "B10" = "Conc_2_repC",
+  "C2" = "Conc_3_repA", "C3" = "Conc_3_repB", "C4" = "Conc_3_repC",
+  "C5" = "Conc_4_repA", "C6" = "Conc_4_repB", "C7" = "Conc_4_repC",
+  "C8" = "Conc_5_repA", "C9" = "Conc_5_repB", "C10" = "Conc_5_repC"
+)
+
+# Mapping for mBaojin samples
+sample_mapping_2_mBaojin_replicon <- c(
+  "B2" = "Conc_1_repA", "B3" = "Conc_1_repB", "B4" = "Conc_1_repC",
+  "B5" = "Conc_0_repA", "B6" = "Conc_0_repB", "B7" = "Conc_0_repC",
+  "B8" = "Conc_2_repA", "B9" = "Conc_2_repB", "B10" = "Conc_2_repC",
+  "C2" = "Conc_3_repA", "C3" = "Conc_3_repB", "C4" = "Conc_3_repC",
+  "C5" = "Conc_4_repA", "C6" = "Conc_4_repB", "C7" = "Conc_4_repC",
+  "C8" = "Conc_5_repA", "C9" = "Conc_5_repB", "C10" = "Conc_5_repC"
+)
+
+#Mapping for mNeonGreen samples
+sample_mapping_3_mnG_replicon <- c(
+  "D2" = "Conc_1_repA", "D3" = "Conc_1_repB", "D4" = "Conc_1_repC",
+  "D5" = "Conc_0_repA", "D6" = "Conc_0_repB", "D7" = "Conc_0_repC",
+  "D8" = "Conc_2_repA", "D9" = "Conc_2_repB", "D10" = "Conc_2_repC",
+  "E2" = "Conc_3_repA", "E3" = "Conc_3_repB", "E4" = "Conc_3_repC",
+  "E5" = "Conc_4_repA", "E6" = "Conc_4_repB", "E7" = "Conc_4_repC",
+  "E8" = "Conc_5_repA", "E9" = "Conc_5_repB", "E10" = "Conc_5_repC"
+)
+#Mapping for mRuby3 samples
+sample_mapping_4_mRuby3 <- c(
+  "F2" = "Conc_1_repA", "F3" = "Conc_1_repB", "F4" = "Conc_1_repC",
+  "F5" = "Conc_0_repA", "F6" = "Conc_0_repB", "F7" = "Conc_0_repC",
+  "F8" = "Conc_2_repA", "F9" = "Conc_2_repB", "F10" = "Conc_2_repC",
+  "G2" = "Conc_3_repA", "G3" = "Conc_3_repB", "G4" = "Conc_3_repC",
+  "G5" = "Conc_4_repA", "G6" = "Conc_4_repB", "G7" = "Conc_4_repC",
+  "G8" = "Conc_5_repA", "G9" = "Conc_5_repB", "G10" = "Conc_5_repC"
+)
+#Nontransfected #1
+#Control: #0
+#Guan 4 mM #2
+#Rupi 1 uM #3
+#Envi 25 uM #4
+#Bref 12.5 uM #5
+
+Replicon_Analysis_Function_SPINE("NanoLuc_All_four_Inhibitors_SPINE.csv",sample_mapping_1_nanoluc_replicon,"sample_mapping_1_nanoluc_replicon","black","#DA9924",0,6)
+Replicon_Analysis_Function_SPINE("GFP_SPINE_All_inhibitors.csv",sample_mapping_2_mBaojin_replicon,"sample_mapping_2_mBaojin_replicon","black","#359169",3,5)
+Replicon_Analysis_Function_SPINE("GFP_SPINE_All_inhibitors.csv",sample_mapping_3_mnG_replicon,"sample_mapping_3_mnG_replicon","black","#2464A6",3,5)
+Replicon_Analysis_Function_SPINE("RFP_SPINE_All_inhibitors.csv",sample_mapping_4_mRuby3,"sample_mapping_4_mRuby3","black","#BC729C",2.5,4.5)
+```
+
+```{r}
+#Reading in .csv file from Neo2 replicon dataset
+Replicon_dataframe_merged <- read_csv("Replicon_Comparison_Merge.csv")
+#Subsetting the dataframe to measure only 16 hrs.
+Replicon_dataframe_merged <- Replicon_dataframe_merged[1:97, ]
+#Changing Time to character
+Replicon_dataframe_merged$Time <- as.character(Replicon_dataframe_merged$Time)
+#Changing time format into minutes
+Replicon_dataframe_merged$Time <- as.numeric(as.difftime(Replicon_dataframe_merged$Time, format = "%H:%M:%S", units = "mins"))
+    
+Replicon_dataframe_merged <- pivot_longer(Replicon_dataframe_merged, cols = -Time, names_to = "SampleName",values_to = "RLU")
+
+Replicon_dataframe_merged <- Replicon_dataframe_merged %>% mutate(proteiname = str_extract(SampleName, "^[^_]+"))
+
+#Group by time and concentration and calculate the mean and sd at each timepoint
+Replicon_dataframe_merged <- Replicon_dataframe_merged %>% group_by(Time, proteiname) %>%
+  mutate(mean_RLU = mean(RLU),
+       sd_RLU = sd(RLU))%>% distinct(Time, proteiname, .keep_all = TRUE)
+
+#Select columns of interest
+Replicon_dataframe_merged <- Replicon_dataframe_merged[, c("Time", "proteiname","mean_RLU","sd_RLU")]
+
+
+ # Create the main plot with the replicon data
+Plot_Merge_FP <- ggplot(Replicon_dataframe_merged, aes(x = Time, y = log10(mean_RLU), color = proteiname)) +
+  geom_point(size=0.5)  +
+  labs(x = "Time (min)", y = "RLU (log10)") +theme_bw() + ylim(1, 5.5) +
+scale_color_manual(values = c("Nanoluc" = "#DA9924", "mBJ" = "#359169", "mnG" = "#2464A6","mRuby3" = "#BC729C"))  
+
+Plot_Merge_FP
+ggsave(plot=Plot_Merge_FP,"Plot_Merge_FP.pdf", height = 4, width = 6)
+
+dynamic_range <- Replicon_dataframe_merged %>%
+  group_by(proteiname) %>% 
+  summarise(
+    min_value = min(mean_RLU, na.rm = TRUE),
+    max_value = max(mean_RLU, na.rm = TRUE),
+    dynamic_range = round(log10(max_value) - log10(min_value), 1) 
+  )
+
+dynamic_range
+```
+
+```{r}
+# Mapping for Nanoluc infection samples
+
+sample_mapping_Nanoluc_virus <- c(
+  "B2" = "Conc_1_repA", "B3" = "Conc_1_repB", "B4" = "Conc_1_repC",
+  "B5" = "Conc_2_repA", "B6" = "Conc_2_repB", "B7" = "Conc_3_repA",
+  "B8" = "Conc_2_repC", "B9" = "Conc_3_repB", "B10" = "Conc_3_repC",
+  "C2" = "Conc_4_repA", "C3" = "Conc_4_repB", "C4" = "Conc_4_repC",
+  "C5" = "Conc_5_repA", "C6" = "Conc_5_repB", "C7" = "Conc_5_repC",
+  "C8" = "Conc_0_repA", "C9" = "Conc_0_repB", "C10" = "Conc_0_repC"
+)
+
+#1 = NI
+#0 Infected
+#2 Guan
+#3 Rupi
+#4 Envi
+#5 BrefA
+
+Replicon_Analysis_Function_SPINE("EVA71VIRUS_Nanoluc_Datatablec.csv",sample_mapping_Nanoluc_virus,"sample_mapping_Nanoluc_virus","black","#DA9924",0,6)
+```
+
+```{r}
+# Mapping for Nanoluc infection of SPINAL organoids
+
+sample_mapping_Nanoluc_virus_SPINAL_organoids <- c(
+  "A1" = "Conc_1_repA", "A2" = "Conc_1_repB", "A3" = "Conc_1_repC",
+  "A7" = "Conc_0_repA", "A8" = "Conc_0_repB", "A9" = "Conc_0_repC",
+  "A10" = "Conc_2_repA", "A11" = "Conc_2_repB", "A12" = "Conc_2_repC"
+  )
+
+#1 = NI
+#0 Infected
+#2 Rupi
+
+
+Replicon_Analysis_Function_SPINE("SPINAL_ORGANOIDS_NANOLUC_VIRUS.csv",sample_mapping_Nanoluc_virus_SPINAL_organoids,"sample_mapping_Nanoluc_virus_SPINAL_organoids","black","#DA9924",0,5)
+```
+
+
+
+```{r}
+masterclone_large_titers <- read_csv("SPINE_Final_Titers_Large_Inserts.csv")
+
+Master_Clone_plot_largetiters <- ggplot(masterclone_large_titers)+geom_point(aes(x=dataset,y=Passage_number,colour=log10(VirusTiter),size=ProteinSize))+theme_bw()+ylab("")+scale_x_discrete(limits = c("mRuby3","mNeonGreen","mBaoJin","NanoLuc","mFAP10"))+ coord_fixed(ratio = 1)+
+scale_y_discrete(limits = c("Passage 3","Passage 0"))
+                 Master_Clone_plot_largetiters
+ggsave(plot = Master_Clone_plot_largetiters,filename = "Master_Clone_plot_largetiters.pdf",width = 5,height=3)
+```
+
+```
+
