@@ -1,8 +1,10 @@
 # Novel Reporter Constructs to Accelerate Antiviral and Therapeutic Discovery for Enterovirus-A71
 
-Abstract
+## *Abstract*
 
 Enterovirus A71 (EV-A71) is an important human pathogen and ‘prototype pathogen’ for studies of other Enteroviruses of pandemic potential. Understanding the biology of EV-A71 would inform generalizable strategies for antiviral drug, vaccine, and monoclonal antibody development. Such studies are accelerated by robust reagents to evaluate efficacy. Here, we describe and evaluate a suite of synthetic reporter constructs to accelerate EV-A71 research and therapeutic discovery. These constructs include replicons and infectious clones carrying luminescent and fluorescent reporter proteins. Among the reporters we tested were shorter luminescent and de novo-designed synthetic fluorescent proteins, which enhance genetic stability, reduce reporter gene loss and improve the utility of these reporters. This toolbox provides free access to robust and flexible assays for EV-A71 infection and replication through public repositories, promoting and accelerating open scientific discovery for this understudied emerging pathogen. 
+
+-----
 
 <https://github.com/QVEU/EVA71_Reporters>
 
@@ -68,22 +70,7 @@ Original and complete images of the tapestation data for amplicons shown in the 
 All the Chai Discovery structure prediction outputs for 2A fusion proteins with the reporter genes.
 
 ## Sharing/Access information
-
-
-This is a section for linking to other ways to access the data, and for linking to sources the data is derived from, if any.
-
-
-Links to other publicly accessible locations of the data:
-
-
-*   <http://...>
-
-
-Data was derived from the following sources:
-
-
-*
-
+[None]
 
 ## Code/Software
 Data analysis and visualization was performed with R (version 4.3.3) using the tidyverse, ggplot2 and lubridate packages. Imaging data processing was performed using Fiji/ImageJ  (version 2.14.0) and CellProfiler (version 4.2.6). Molecular graphics and analysis was performed using UCSF Chimera X (version 1.8).
