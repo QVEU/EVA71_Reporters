@@ -6,16 +6,16 @@ Enterovirus A71 (EV-A71) is an important human pathogen and ‘prototype pathoge
 
 <https://github.com/QVEU/EVA71_Reporters>
 
-This data repository is related to the publication "Novel Reporter Constructs to Accelerate Antiviral and Therapeutic Discovery for Enterovirus-A71 ", William Bakhache,  Ann Shen, Walker Symonds-Orr, Megan Culler Freeman, Patrick T. Dolan. This data repository contains code for figure generation and analysis , Neo2 and CellProfiler protocols, and sequences of plasmids.
+This data repository is related to the (submitted) publication "Novel Reporter Constructs to Accelerate Antiviral and Therapeutic Discovery for Enterovirus-A71 ", William Bakhache, Ann Shen, Walker Symonds-Orr, Megan Culler Freeman, Patrick T. Dolan. This data repository contains code for figure generation and analysis, Neo2 and CellProfiler protocols, and sequences of plasmids.
 
 Description of the data and file structure are below.
 
 Correspondence can be sent to Patrick.Dolan@nih.gov
-Quantitative Virology and Evolution Unit, NIH-NIAID: https:/ /qveu.github.io/QVEU/
+Quantitative Virology and Evolution Unit, NIH-NIAID: https://qveu.github.io/QVEU/
 
 ## Description of the data and file structure
 
-1- Plasmids
+### 1. Plasmids
 Contains all the molecular biology supplementary information regarding the reporter viruses and molecular clones. The plasmids include molecular clones and replicons for the EV-A71 (strain Tainan/4643/98, Genbank accession: AF304458.1) that encode different reporter genes. 
 
 For the folder "Viral_Molecular_Clone", there is a total of eight plasmids:
@@ -46,10 +46,10 @@ The folder "Replicon/BsaI_Inserts" contains all the sequences for the inserted r
 
 For the folder "NLS_BFP_Lentivirus_Plasmid", there is one lentiviral plasmid sequence: This modified version produced by Marvin Tanenbaum's lab contains a lentiviral transfer plasmid pHR_SFFV allowing expression of the blue fluorescent protein fused with a nuclear localization signal.
 
-2- R_Code_Figure_Generation
+### 2. R_Code_Figure_Generation
 This folder contains the R code along with the data frames required for generation of figures in the paper.
 
-3- Imaging_Data_and_Analysis
+### 3. Imaging_Data_and_Analysis (Note: Not deposited here, due to size)
 This folder contains original images, CellProfiler analysis, and R code for figure generation.
 
 The folder "Imaging_Data_and_Analysis/Fixed_Imaging" contains all images of fluorescent viruses as well as the CellProfiler analysis of the images with the R code used to visualize the CellProfiler data. 
@@ -58,13 +58,13 @@ The folder "Imaging_Data_and_Analysis/Live_Imaging" contains a time series of ce
 
 The folder "Imaging_Data_and_Analysis/Spinal_Organoids_MFAP10" contains images of human spinal organoids infected with mFAP10. Wells A1-A6 are non infected organoids. Wells A7-A9 are infected organoids with MFAP10. A10-A12 are infected organoids treated with 1 uM of Rupintrivir.
 
-4- BioTek_Synergy_Neo2_Protocols
+### 4. BioTek_Synergy_Neo2_Protocols
 Contains the Neo2 protocols to run the fluorescence (Fluorescence_kinetics_protocol.prt) and luminescene (Luminescence_kinetics_protocol.prt) readings on the BioTek Gen5/3.12 software. 
 
-5- Tapestation_Data
+### 5. Tapestation_Data
 Original and complete images of the tapestation data for amplicons shown in the paper.
 
-6- Structural_Analysis
+## 6. Structural_Analysis
 All the Chai Discovery structure prediction outputs for 2A fusion proteins with the reporter genes.
 
 ## Sharing/Access information
