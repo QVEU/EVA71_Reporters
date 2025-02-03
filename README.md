@@ -1,4 +1,5 @@
 # Novel Reporter Constructs to Accelerate Antiviral and Therapeutic Discovery for Enterovirus-A71
+https://doi.org/10.1016/j.antiviral.2025.106094
 
 ## *Abstract*
 
@@ -8,7 +9,7 @@ Enterovirus A71 (EV-A71) is an important human pathogen and ‘prototype pathoge
 
 <https://github.com/QVEU/EVA71_Reporters>
 
-This data repository is related to the (submitted) publication "Novel Reporter Constructs to Accelerate Antiviral and Therapeutic Discovery for Enterovirus-A71 ", William Bakhache, Ann Shen, Walker Symonds-Orr, Megan Culler Freeman, Patrick T. Dolan. This data repository contains code for figure generation and analysis, Neo2 and CellProfiler protocols, and sequences of plasmids.
+This data repository is related to "Novel Reporter Constructs to Accelerate Antiviral and Therapeutic Discovery for Enterovirus-A71 ", William Bakhache, Ann Shen, Walker Symonds-Orr, Megan Culler Freeman, Patrick T. Dolan. Antiviral Research (2025). [https://doi.org/10.1016/j.antiviral.2025.106094](https://doi.org/10.1016/j.antiviral.2025.106094) This data repository contains code for figure generation and analysis, Neo2 and CellProfiler protocols, and sequences of plasmids.
 
 Description of the data and file structure are below.
 
