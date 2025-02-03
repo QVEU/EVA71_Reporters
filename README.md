@@ -70,7 +70,7 @@ Original and complete images of the tapestation data for amplicons shown in the 
 All the Chai Discovery structure prediction outputs for 2A fusion proteins with the reporter genes.
 
 ## Sharing/Access information
-[None]
+Deposition is currently being reviewed by [BEI Resources](https://www.beiresources.org/About/BEIResources.aspx). Accession will be updated here when approved. 
 
 ## Code/Software
 Data analysis and visualization was performed with R (version 4.3.3) using the tidyverse, ggplot2 and lubridate packages. Imaging data processing was performed using Fiji/ImageJ  (version 2.14.0) and CellProfiler (version 4.2.6). Molecular graphics and analysis was performed using UCSF Chimera X (version 1.8).
